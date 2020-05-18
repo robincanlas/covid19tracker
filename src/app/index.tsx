@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { HomePage } from './pages';
+import { StatisticPage } from './pages';
 
 export const App: React.FC = () => {
 
 	return (
 		<React.Fragment>
-			<HomePage />
+			<StatisticPage />
 		</React.Fragment>
 	);
 };

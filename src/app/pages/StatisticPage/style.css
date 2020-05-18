@@ -1,0 +1,41 @@
+#container .title { 
+  display: flex;
+  justify-content: center;
+  margin: 1em 0;
+  font-size: 2em;
+  font-weight: bolder;
+}
+
+#container .grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1em;
+}
+
+#container .grid > div {
+  margin: 0;
+}
+
+#container .header {
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+
+#container .confirmed {
+  border-bottom: 10px solid lightblue;
+}
+
+#container .recovered {
+  border-bottom: 10px solid rgb(53, 255, 3);
+}
+
+#container .deaths {
+  border-bottom: 10px solid red;
+}
+
+/* * to desktop */
+@media (min-width: 768px) {
+  #container .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

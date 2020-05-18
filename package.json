@@ -1,8 +1,8 @@
 {
-  "name": "kristoffer-robin-canlas",
-  "homepage": "https://robincanlas.github.io",
+  "name": "covid19tracker",
+  "homepage": "https://kristofferrobincanlas.github.io/covid19tracker",
   "version": "1.0.0",
-  "description": "I'm Kristoffer Robin Canlas, a developer based in Quezon City, Philippines. I have almost 6 years of experience as a Web Developer. My passion is coding and learning new technologies.",
+  "description": "Covid 19 Global tracker",
   "main": "index.js",
   "scripts": {
     "build": "rimraf -rm build && webpack --mode=production",
@@ -55,6 +55,7 @@
     "postcss-preset-env": "^6.7.0",
     "postcss-reporter": "^6.0.1",
     "postcss-url": "^8.0.0",
+    "react-countup": "^4.3.3",
     "react-hot-loader": "^4.12.20",
     "redux-actions": "^2.6.5",
     "redux-thunk": "^2.3.0",

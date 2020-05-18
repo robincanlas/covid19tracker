@@ -10,10 +10,8 @@ export namespace Models {
 		detail: string;
 	}
 
-	export interface Country {
-		confirmed: Detail;
-		recovered: Detail;
-		deaths: Detail;
+	export interface Statistics extends Detail {
+		name: string;
 	}
 
 	export interface EndPoint {

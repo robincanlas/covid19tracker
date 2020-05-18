@@ -2,14 +2,14 @@ import { Models } from 'app/models';
 
 export const initialState = {
 	countries: [],
-	country: {},
+	statistics: [],
 	isLoading: true,
 	error: ''
 };
 
 export type StatisticsState = {
 	countries: Models.Countries[],
-	country: Models.Country,
+	statistics: Models.Statistics[],
 	isLoading: boolean;
 	error: string;
 };

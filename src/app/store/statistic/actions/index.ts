@@ -9,16 +9,15 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 type Thunk = ThunkAction<void, {}, {}, AnyAction>;
 
 export namespace StatisticsActions {
-	export const getCountries = (): Thunk => {
+	export const getStats = (): Thunk => {
 		const request = createAction(ActionTypes.GET_STATISTICS_REQUEST);
 		const success = createAction<any>(ActionTypes.GET_STATISTICS_SUCCESS);
 		const failure = createAction<any>(ActionTypes.GET_STATISTICS_FAILED);
 		
 		return (dispatch: ThunkDispatch<{}, {}, AnyAction>): void => {
 			dispatch(request());
-			axios.get(endPoint.countries)
+			axios.get(endPoint.url)
 				.then(response => {
-					console.log(response);
 					dispatch(success(response.data));
 				})
 				.catch(error => {
