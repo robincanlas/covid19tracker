@@ -24,16 +24,13 @@ const CountryDropdown: React.FC<CountryDropdown.Props> = ({
 	statsActions = StatisticsActions, 
 	countriesActions = CountriesActions }: CountryDropdown.Props) => {
 	
-		React.useEffect(() => {
+	React.useEffect(() => {
 		countriesActions.getCountries();
 	}, []);
 
 	const changeCountry = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-		let country: string = data.value as string;
-		if (data.value === 'Global') {
-			country = '';
-		}
-		statsActions.getStats(endPoint.countries + country);
+		let url: string = data.value === 'Global' ? endPoint.url : endPoint.countries + data.value;
+		statsActions.getStats(url);
 	};
 
 	return (

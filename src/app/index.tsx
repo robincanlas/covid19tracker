@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Statistic, Countries } from 'app/components';
+import { Statistic, Countries, Chart } from 'app/components';
 
 export const App: React.FC = () => {
 
@@ -7,6 +7,7 @@ export const App: React.FC = () => {
 		<React.Fragment>
 			<Statistic />
 			<Countries />
+			<Chart />
 		</React.Fragment>
 	);
 };
