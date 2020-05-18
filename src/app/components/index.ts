@@ -1,1 +1,2 @@
-export * from './SVGIcons';
+export * from './Statistic';
+export * from './Countries';

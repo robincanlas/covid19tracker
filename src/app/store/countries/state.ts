@@ -1,13 +1,15 @@
 import { Models } from 'app/models';
 
 export const initialState = {
-	statistics: [],
+	list: [
+		{ key: 'Global', value: 'Global', text: 'Global' }
+	],
 	isLoading: true,
 	error: ''
 };
 
-export type StatisticsState = {
-	statistics: Models.Statistics[],
+export type CountriesState = {
+	list: Models.Countries[],
 	isLoading: boolean;
 	error: string;
 };

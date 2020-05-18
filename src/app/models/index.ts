@@ -1,8 +1,8 @@
 export namespace Models {
 	export interface Countries {
-		name: string;
-		iso2: string;
-		iso3: string;
+		text: string;
+		key: string;
+		value: string;
 	}
 
 	export interface Detail {

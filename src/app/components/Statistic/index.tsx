@@ -7,8 +7,9 @@ import { Models } from 'app/models';
 import { Dispatch, bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CountUp from 'react-countup';
+import { endPoint } from 'app/constants';
 
-export namespace StatisticPageComponent {
+export namespace StatisticComponent {
 	export interface Props {
 		statistics?: Models.Statistics[];
 		isLoading?: boolean;
@@ -16,14 +17,10 @@ export namespace StatisticPageComponent {
 	}
 }
 
-const StatisticPageComponent: React.FC<StatisticPageComponent.Props> = ({ statistics = [], isLoading = true, actions = StatisticsActions }: StatisticPageComponent.Props) => {
+const StatisticComponent: React.FC<StatisticComponent.Props> = ({ statistics = [], isLoading = true, actions = StatisticsActions }: StatisticComponent.Props) => {
 	React.useEffect(() => {
-		actions.getStats();
+		actions.getStats(endPoint.url);
 	}, []);
-	
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
 
 	return (
 		<Container id={style.container}>
@@ -37,7 +34,7 @@ const StatisticPageComponent: React.FC<StatisticPageComponent.Props> = ({ statis
 								<CountUp 
 								start={0} 
 								end={element.value}
-								duration={2.5}
+								duration={2}
 								separator=',' />
 							</Card.Header>
 							<Card.Description>
@@ -51,16 +48,16 @@ const StatisticPageComponent: React.FC<StatisticPageComponent.Props> = ({ statis
 	);
 };
 
-const mapStateToProps = (state: RootState): Pick<StatisticPageComponent.Props, 'statistics' | 'isLoading'> => {
+const mapStateToProps = (state: RootState): Pick<StatisticComponent.Props, 'statistics' | 'isLoading'> => {
 	return {
 		statistics: state.statistic.statistics,
 		isLoading: state.statistic.isLoading
 	};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Pick<StatisticPageComponent.Props, 'actions'> => ({
+const mapDispatchToProps = (dispatch: Dispatch): Pick<StatisticComponent.Props, 'actions'> => ({
 	actions: bindActionCreators(StatisticsActions, dispatch)
 });
 
-const StatisticPageConnect = connect(mapStateToProps, mapDispatchToProps)(StatisticPageComponent);
-export { StatisticPageConnect as StatisticPage };
+const StatisticConnect = connect(mapStateToProps, mapDispatchToProps)(StatisticComponent);
+export { StatisticConnect as Statistic };

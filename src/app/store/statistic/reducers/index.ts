@@ -3,7 +3,7 @@ import { Models } from 'app/models';
 import { handleActions } from 'redux-actions';
 import { ActionTypes } from 'app/constants';
 
-type Payload = Models.Countries[] | Models.Statistics | string | any;
+type Payload = Models.Statistics | string | any;
 
 export const StatisticReducer = handleActions<StatisticsState | Payload, Payload> (
 	{

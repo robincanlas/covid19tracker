@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { StatisticPage } from './pages';
+import { Statistic, Countries } from 'app/components';
 
 export const App: React.FC = () => {
 
 	return (
 		<React.Fragment>
-			<StatisticPage />
+			<Statistic />
+			<Countries />
 		</React.Fragment>
 	);
 };
