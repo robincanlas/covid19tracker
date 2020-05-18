@@ -18,4 +18,11 @@ export namespace Models {
 		url: string;
 		countries: string;
 	}
+
+	export interface Chart {
+		confirmed: number;
+		deaths: number;
+		reportDate: string;
+		date: string;
+	}
 }

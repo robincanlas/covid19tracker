@@ -12,12 +12,15 @@ import { endPoint } from 'app/constants';
 export namespace StatisticComponent {
 	export interface Props {
 		statistics?: Models.Statistics[];
+		lastUpdate?: string;
 		isLoading?: boolean;
 		actions?: StatisticsActions;
 	}
 }
 
-const StatisticComponent: React.FC<StatisticComponent.Props> = ({ statistics = [], isLoading = true, actions = StatisticsActions }: StatisticComponent.Props) => {
+const StatisticComponent: React.FC<StatisticComponent.Props> = ({ 
+	statistics = [], lastUpdate = '', isLoading = true, actions = StatisticsActions }: StatisticComponent.Props) => {
+	
 	React.useEffect(() => {
 		actions.getStats(endPoint.url);
 	}, []);
@@ -37,6 +40,7 @@ const StatisticComponent: React.FC<StatisticComponent.Props> = ({ statistics = [
 								duration={2}
 								separator=',' />
 							</Card.Header>
+							<Card.Meta>{lastUpdate}</Card.Meta>
 							<Card.Description>
 								{`Number of ${element.name} ${element.name === 'deaths' ? 'from' : 'cases from' } COVID-19`}
 							</Card.Description>
@@ -48,9 +52,10 @@ const StatisticComponent: React.FC<StatisticComponent.Props> = ({ statistics = [
 	);
 };
 
-const mapStateToProps = (state: RootState): Pick<StatisticComponent.Props, 'statistics' | 'isLoading'> => {
+const mapStateToProps = (state: RootState): Pick<StatisticComponent.Props, 'statistics' | 'lastUpdate' | 'isLoading'> => {
 	return {
 		statistics: state.statistic.statistics,
+		lastUpdate: state.statistic.lastUpdate,
 		isLoading: state.statistic.isLoading
 	};
 };

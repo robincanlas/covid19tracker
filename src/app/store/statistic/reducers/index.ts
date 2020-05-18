@@ -14,12 +14,13 @@ export const StatisticReducer = handleActions<StatisticsState | Payload, Payload
 			};
 		},
 		[ActionTypes.GET_STATISTICS_SUCCESS]: (state, action) => {
-			const { confirmed, recovered, deaths } = action.payload;
+			const { confirmed, recovered, deaths, lastUpdate } = action.payload;
 			const statistics: any[] = [ {...confirmed, name: 'confirmed'}, {...recovered, name: 'recovered'}, {...deaths, name: 'deaths'} ];
 			return {
 				...state,
 				isLoading: false,
-				statistics: statistics
+				statistics: statistics,
+				lastUpdate: new Date(lastUpdate as string).toDateString()
 			};
 		},
 		[ActionTypes.GET_STATISTICS_FAILED]: (state, action) => {

@@ -5,7 +5,7 @@ export interface Icon { [key: string]: JSX.Element; }
 
 export const endPoint: Models.EndPoint = {
 	url: 'https://covid19.mathdro.id/api',
-	countries: 'https://covid19.mathdro.id/api/countries/',
+	countries: 'https://covid19.mathdro.id/api/countries/'
 };
 
 export enum ActionTypes {
@@ -15,5 +15,9 @@ export enum ActionTypes {
 
 	GET_COUNTRIES_REQUEST = 'GET_COUNTRIES_REQUEST',
 	GET_COUNTRIES_SUCCESS = 'GET_COUNTRIES_SUCCESS',
-	GET_COUNTRIES_FAILED = 'GET_COUNTRIES_FAILED'
+	GET_COUNTRIES_FAILED = 'GET_COUNTRIES_FAILED',
+
+	GET_DAILY_REQUEST = 'GET_DAILY_REQUEST',
+	GET_DAILY_SUCCESS = 'GET_DAILY_SUCCESS',
+	GET_DAILY_FAILED = 'GET_DAILY_FAILED'
 }
