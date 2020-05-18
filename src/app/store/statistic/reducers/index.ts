@@ -1,21 +1,26 @@
 import { initialState, StatisticsState } from '../state';
 import { Models } from 'app/models';
 import { handleActions } from 'redux-actions';
-import { ActionTypes } from 'app/constants';
+import { ActionTypes, Statistics } from 'app/constants';
 
 type Payload = Models.Statistics | string | any;
 
 export const StatisticReducer = handleActions<StatisticsState | Payload, Payload> (
 	{
 		[ActionTypes.GET_STATISTICS_REQUEST]: (state, action) => {
+			console.log(action.payload.country);
 			return {
 				...state,
-				isLoading: true
+				isLoading: true,
+				country: action.payload.country
 			};
 		},
 		[ActionTypes.GET_STATISTICS_SUCCESS]: (state, action) => {
 			const { confirmed, recovered, deaths, lastUpdate } = action.payload;
-			const statistics: any[] = [ {...confirmed, name: 'confirmed'}, {...recovered, name: 'recovered'}, {...deaths, name: 'deaths'} ];
+			const statistics: any[] = [ 
+				{ ...confirmed, name: Statistics.CONFIRMED }, 
+				{ ...recovered, name: Statistics.RECOVERED }, 
+				{ ...deaths, name: Statistics.DEATHS } ];
 			return {
 				...state,
 				isLoading: false,

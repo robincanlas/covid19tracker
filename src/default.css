@@ -16,4 +16,7 @@ html, body {
   height: 100%;
 }
 
+body {
+  transition: background 500ms ease-in-out;
+}
 /* DEFAULTS [E] */

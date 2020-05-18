@@ -8,6 +8,12 @@ export const endPoint: Models.EndPoint = {
 	countries: 'https://covid19.mathdro.id/api/countries/'
 };
 
+export enum Statistics {
+	CONFIRMED = 'confirmed',
+	RECOVERED = 'recovered',
+	DEATHS = 'deaths'
+}
+
 export enum ActionTypes {
 	GET_STATISTICS_REQUEST = 'GET_STATISTICS_REQUEST',
 	GET_STATISTICS_SUCCESS = 'GET_STATISTICS_SUCCESS',
