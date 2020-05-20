@@ -29,7 +29,7 @@ module.exports = (env, option) => {
     },
     output: {
       // publicPath: '/', //<--- output path if using nodejs
-      publicPath: isProduction ? '/build/' : '/', //<--- output path for github
+      publicPath: isProduction ? './' : '/', //<--- output path for github
       path: outPath,
       filename: isProduction ? '[contenthash].js' : '[hash].js',
       chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].[hash].js'

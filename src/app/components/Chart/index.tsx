@@ -26,13 +26,10 @@ export const ChartComponent: React.FC<Chart.Props> = ({
 	country = 'Global', 
 	actions = ChartActions 
 }: Chart.Props) => {
+	
 	React.useEffect(() => {
 		actions.getDaily();
 	}, []);
-
-	React.useEffect(() => {
-		console.log(statistics, country);
-	}, [statistics, country]);
 	
 	if (country === 'Global') {
 		return (

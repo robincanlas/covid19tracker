@@ -8,7 +8,6 @@ type Payload = Models.Statistics | string | any;
 export const StatisticReducer = handleActions<StatisticsState | Payload, Payload> (
 	{
 		[ActionTypes.GET_STATISTICS_REQUEST]: (state, action) => {
-			console.log(action.payload.country);
 			return {
 				...state,
 				isLoading: true,
