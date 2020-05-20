@@ -1,4 +1,4 @@
-// import { Models } from 'app/models';
+import { Models } from 'app/models';
 
 export const initialState = {
 	dailyData: [],
@@ -7,7 +7,7 @@ export const initialState = {
 };
 
 export type ChartState = {
-	dailyData: any,
+	dailyData: Models.DailyData[],
 	isLoading: boolean;
 	error: string;
 };

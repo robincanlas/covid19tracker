@@ -26,4 +26,11 @@ export namespace Models {
 		reportDate: string;
 		date: string;
 	}
+
+	export interface DailyData {
+		date: string;
+		confirmed: number; 
+		deaths: number;
+		recovered: number;
+	}
 }

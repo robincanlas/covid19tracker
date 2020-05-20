@@ -1,3 +1,7 @@
 #container {
   background: white;
 }
+
+#container .error {
+  text-align: center;
+}

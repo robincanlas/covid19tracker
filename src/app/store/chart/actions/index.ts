@@ -23,7 +23,7 @@ export namespace ChartActions {
 					dispatch(success(isGlobal ? response.data : response.data.timeline));
 				})
 				.catch(error => {
-					dispatch(failure(error.data));
+					dispatch(failure(error));
 				});
 		};
 	};

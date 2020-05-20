@@ -36,6 +36,8 @@ const CountryDropdown: React.FC<CountryDropdown.Props> = ({
 	return (
 		<Container id={style.container}>
 			<Dropdown 
+				loading={isLoading}
+				disabled={isLoading}
 				className={style.dropdown}
 				fluid
 				search

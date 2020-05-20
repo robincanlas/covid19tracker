@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as style from './style.css';
-import { Container } from 'semantic-ui-react';
+import { Container, Message } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { RootState } from 'app/store';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -12,6 +12,7 @@ namespace Chart {
 		dailyData?: any;
 		isLoading?: boolean;
 		country?: string;
+		error?: string;
 
 		actions?: ChartActions;
 	}
@@ -20,7 +21,8 @@ namespace Chart {
 export const ChartComponent: React.FC<Chart.Props> = ({ 
 	dailyData = [], 
 	isLoading = true, 
-	country = 'Global', 
+	country = 'Global',
+	error = '', 
 	actions = ChartActions 
 }: Chart.Props) => {
 
@@ -30,6 +32,16 @@ export const ChartComponent: React.FC<Chart.Props> = ({
 		}
 	}, [country]);
 	
+	if (error) {
+		return (
+			<Container id={style.container}>
+				<Message negative className={style.error}>
+					<Message.Header>No Historical Data.</Message.Header>
+				</Message>
+			</Container>
+		);
+	}
+
 	return (
 		<Container id={style.container}>
 			<Line
@@ -58,17 +70,22 @@ export const ChartComponent: React.FC<Chart.Props> = ({
 				}}					
 				options={{
 					title: { display: true, text: `Current state ${country === 'Global' ? 'of the World' : `in ${country}`}` },
+					animation: {
+						duration: 750,
+						easing: 'easeOutCubic'
+					},
 				}}
 			/>
 		</Container>
 	);
 };
 
-const mapStateToProps = (state: RootState): Pick<Chart.Props, 'dailyData' | 'isLoading' | 'country'> => {
+const mapStateToProps = (state: RootState): Pick<Chart.Props, 'dailyData' | 'isLoading' | 'country' | 'error'> => {
 	return {
 		dailyData: state.chart.dailyData,
 		isLoading: state.chart.isLoading,
-		country: state.statistic.country
+		country: state.statistic.country,
+		error: state.chart.error
 	};
 };
 
