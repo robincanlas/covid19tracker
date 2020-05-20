@@ -3,6 +3,8 @@ export namespace Models {
 		text: string;
 		key: string;
 		value: string;
+
+		flag: string;
 	}
 
 	export interface Detail {
@@ -16,7 +18,6 @@ export namespace Models {
 
 	export interface EndPoint {
 		url: string;
-		countries: string;
 	}
 
 	export interface Chart {

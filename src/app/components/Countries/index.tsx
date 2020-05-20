@@ -29,7 +29,7 @@ const CountryDropdown: React.FC<CountryDropdown.Props> = ({
 	}, []);
 
 	const changeCountry = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-		let url: string = data.value === 'Global' ? endPoint.url : `${endPoint.countries}${data.value}`;
+		let url: string = data.value === 'Global' ? `${endPoint.url}/all` : `${endPoint.url}/countries/${data.value}`;
 		statsActions.getStats(url, data.value as string);
 	};
 

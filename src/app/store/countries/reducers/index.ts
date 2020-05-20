@@ -14,12 +14,13 @@ export const CountriesReducer = handleActions<CountriesState | Payload, Payload>
 			};
 		},
 		[ActionTypes.GET_COUNTRIES_SUCCESS]: (state, action) => {
-			const list: Models.Countries[] = initialState.list;
-			action.payload.countries.forEach((element: Payload) => {
+			const list: any = initialState.list;
+			action.payload.forEach((element: Payload) => {
 				list.push({
-					text: element.name,
-					key: element.name,
-					value: element.name
+					text: element.country,
+					key: element.country,
+					value: element.country,
+					image: { avatar: false, src: element.countryInfo.flag },
 				});
 			});
 			return {

@@ -4,8 +4,7 @@ export const assetsPath: string =  '../../assets';
 export interface Icon { [key: string]: JSX.Element; }
 
 export const endPoint: Models.EndPoint = {
-	url: 'https://covid19.mathdro.id/api',
-	countries: 'https://covid19.mathdro.id/api/countries/'
+	url: 'https://disease.sh/v2',
 };
 
 export enum Statistics {

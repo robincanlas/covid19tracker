@@ -15,16 +15,16 @@ export const StatisticReducer = handleActions<StatisticsState | Payload, Payload
 			};
 		},
 		[ActionTypes.GET_STATISTICS_SUCCESS]: (state, action) => {
-			const { confirmed, recovered, deaths, lastUpdate } = action.payload;
+			const { cases, recovered, deaths, updated } = action.payload;
 			const statistics: any[] = [ 
-				{ ...confirmed, name: Statistics.CONFIRMED }, 
-				{ ...recovered, name: Statistics.RECOVERED }, 
-				{ ...deaths, name: Statistics.DEATHS } ];
+				{ value: cases, name: Statistics.CONFIRMED }, 
+				{ value: recovered, name: Statistics.RECOVERED }, 
+				{ value: deaths, name: Statistics.DEATHS } ];
 			return {
 				...state,
 				isLoading: false,
 				statistics: statistics,
-				lastUpdate: new Date(lastUpdate as string).toDateString()
+				lastUpdate: new Date(updated).toDateString()
 			};
 		},
 		[ActionTypes.GET_STATISTICS_FAILED]: (state, action) => {

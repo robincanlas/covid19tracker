@@ -16,7 +16,7 @@ export namespace CountriesActions {
 		
 		return (dispatch: ThunkDispatch<{}, {}, AnyAction>): void => {
 			dispatch(request());
-			axios.get(endPoint.countries)
+			axios.get(`${endPoint.url}/countries`)
 				.then(response => {
 					dispatch(success(response.data));
 				})

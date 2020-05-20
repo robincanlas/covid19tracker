@@ -24,7 +24,7 @@ const StatisticComponent: React.FC<StatisticComponent.Props> = ({
 	isLoading = true, 
 	actions = StatisticsActions }: StatisticComponent.Props) => {
 	React.useEffect(() => {
-		actions.getStats(endPoint.url, 'Global');
+		actions.getStats(`${endPoint.url}/all`, 'Global');
 	}, []);
 
 	const [mode, setMode] = React.useState(localStorage.getItem('mode') || '');
