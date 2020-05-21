@@ -31,21 +31,23 @@ export const Map: React.FC = () => {
 						country: point.country,
 						province: point.province,
 						cases: point.stats.confirmed,
-						deaths: point.stats.deaths
+						deaths: point.stats.deaths,
+						recovered: point.stats.recovered
 					}
 				}))
 			);
 
 	// Fetching our data with swr package
 	const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
-
 	// Initialize our map
 	React.useEffect(() => {
 		if (data) {
+			// const highesCases: number = Math.max.apply(Math, data.map((o) => { return o.properties.cases; }));
+			
 			// You can store the map instance with useRef too
 			const map = new mapboxgl.Map({
 				container: mapboxElRef.current!,
-				style: 'mapbox://styles/notalemesa/ck8dqwdum09ju1ioj65e3ql3k',
+				style: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v',
 				center: [121.76572,  13.01153], // initial geo location
 				zoom: 2 // initial zoom
 				// zoom: 4.94 // initial zoom
@@ -130,7 +132,7 @@ export const Map: React.FC = () => {
 							// Change the pointer type on move move
 							map.getCanvas().style.cursor = 'pointer';
 
-							const { cases, deaths, country, province }: any = e.features[0].properties;
+							const { cases, deaths, country, province, recovered }: any = e.features[0].properties;
 							const coordinates = e.features[0].geometry.coordinates!.slice();
 
 							// Get all data for the tooltip
@@ -150,6 +152,7 @@ export const Map: React.FC = () => {
 												${provinceHTML}
 												<p>Cases: <b>${cases}</b></p>
 												<p>Deaths: <b>${deaths}</b></p>
+												<p>Recovered: <b>${recovered}</b></p>
 												<p>Mortality Rate: <b>${mortalityRate}%</b></p>
 												${countryFlagHTML}`;
 
