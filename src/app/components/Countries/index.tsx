@@ -4,14 +4,15 @@ import { Container, Dropdown, DropdownProps } from 'semantic-ui-react';
 import { RootState } from 'app/store';
 import { bindActionCreators, Dispatch } from 'redux';
 import { StatisticsActions } from 'app/store/statistic/actions';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Models } from 'app/models';
 import { CountriesActions } from 'app/store/countries/actions';
-import { endPoint } from 'app/constants';
+import { ActionTypes, Statistics } from 'app/constants';
 
 export namespace CountryDropdown {
 	export interface Props {
 		list?: Models.Countries[];
+		countriesPayload?: Models.CountriesPayload[];
 		isLoading?: boolean;
 		statsActions?: StatisticsActions;
 		countriesActions?: CountriesActions;
@@ -20,17 +21,34 @@ export namespace CountryDropdown {
 
 const CountryDropdown: React.FC<CountryDropdown.Props> = ({ 
 	list = [], 
+	countriesPayload = [],
 	isLoading = true, 
 	statsActions = StatisticsActions, 
 	countriesActions = CountriesActions }: CountryDropdown.Props) => {
-	
+	const dispatch = useDispatch();
+
 	React.useEffect(() => {
 		countriesActions.getCountries();
 	}, []);
 
 	const changeCountry = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-		let url: string = data.value === 'Global' ? `${endPoint.url}/all` : `${endPoint.url}/countries/${data.value}`;
-		statsActions.getStats(url, data.value as string);
+		if (data.value === 'Global') {
+			dispatch({ type: ActionTypes.SET_GLOBAL_STATISTICS });
+		} else {
+			const { cases, recovered, deaths, updated }: any = countriesPayload.find(element => element.country === data.value);
+			const statistics: Models.Statistics[] = [ 
+				{ value: cases, name: Statistics.CONFIRMED }, 
+				{ value: recovered, name: Statistics.RECOVERED }, 
+				{ value: deaths, name: Statistics.DEATHS } ];
+			dispatch({
+				type: ActionTypes.SET_COUNTRY_STATISTICS,
+				payload: {
+					country: data.value,
+					statistics: statistics,
+					lastUpdate: new Date(updated).toDateString()
+				}
+			});
+		}
 	};
 
 	return (
@@ -49,9 +67,10 @@ const CountryDropdown: React.FC<CountryDropdown.Props> = ({
 	);
 };
 
-const mapStateToProps = (state: RootState): Pick<CountryDropdown.Props, 'list' | 'isLoading'> => {
+const mapStateToProps = (state: RootState): Pick<CountryDropdown.Props, 'list' | 'countriesPayload' | 'isLoading'> => {
 	return {
 		list: state.countries.list,
+		countriesPayload: state.countries.countriesPayload,
 		isLoading: state.countries.isLoading
 	};
 };

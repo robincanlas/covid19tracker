@@ -69,9 +69,10 @@ export const ChartComponent: React.FC<Chart.Props> = ({
 					],
 				}}					
 				options={{
-					title: { display: true, text: `Current state ${country === 'Global' ? 'of the World' : `in ${country}`}` },
+					// title: { display: true, text: `Current state ${country === 'Global' ? 'of the World' : `in ${country}`}` },
+					title: { display: true, text: `${country} Epidemic Curve` },
 					animation: {
-						duration: 750,
+						duration: 500,
 						easing: 'easeOutCubic'
 					},
 				}}

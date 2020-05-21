@@ -24,6 +24,7 @@ export const StatisticReducer = handleActions<StatisticsState | Payload, Payload
 				...state,
 				isLoading: false,
 				statistics: statistics,
+				global: statistics,
 				lastUpdate: new Date(updated).toDateString()
 			};
 		},
@@ -32,6 +33,19 @@ export const StatisticReducer = handleActions<StatisticsState | Payload, Payload
 				...state,
 				isLoading: false,
 				error: 'Error Fetching'
+			};
+		},
+		[ActionTypes.SET_GLOBAL_STATISTICS]: (state, action) => {
+			return {
+				...state,
+				country: 'Global',
+				statistics: state.global
+			};
+		},
+		[ActionTypes.SET_COUNTRY_STATISTICS]: (state, action) => {
+			return {
+				...state,
+				...action.payload
 			};
 		}
 	},

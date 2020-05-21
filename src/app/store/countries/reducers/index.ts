@@ -3,19 +3,20 @@ import { Models } from 'app/models';
 import { handleActions } from 'redux-actions';
 import { ActionTypes } from 'app/constants';
 
-type Payload = Models.Countries[] | string | any | { name: string; iso2: string; iso3: string; };
+type Payload = Models.Countries[] | string | Models.CountriesPayload[];
 
-export const CountriesReducer = handleActions<CountriesState | Payload, Payload> (
+export const CountriesReducer = handleActions<CountriesState, Payload> (
 	{
 		[ActionTypes.GET_COUNTRIES_REQUEST]: (state, action) => {
 			return {
-				...state,
+				...state as CountriesState,
 				isLoading: true
 			};
 		},
 		[ActionTypes.GET_COUNTRIES_SUCCESS]: (state, action) => {
 			const list: any = initialState.list;
-			action.payload.forEach((element: Payload) => {
+			const payload: Models.CountriesPayload[] = action.payload as Models.CountriesPayload[];
+			payload.forEach((element: Models.CountriesPayload) => {
 				list.push({
 					text: element.country,
 					key: element.country,
@@ -24,14 +25,15 @@ export const CountriesReducer = handleActions<CountriesState | Payload, Payload>
 				});
 			});
 			return {
-				...state,
+				...state as CountriesState,
 				isLoading: false,
-				list: list
+				list: list as Models.Countries[],
+				countriesPayload: payload
 			};
 		},
 		[ActionTypes.GET_COUNTRIES_FAILED]: (state, action) => {
 			return {
-				...state,
+				...state as CountriesState,
 				isLoading: false,
 				error: 'Error Fetching'
 			};
