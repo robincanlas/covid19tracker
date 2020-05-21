@@ -70,7 +70,11 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@types/country-code-lookup": "0.0.0",
+    "@types/mapbox-gl": "^1.10.2",
     "chart.js": "^2.9.3",
+    "country-code-lookup": "0.0.17",
+    "mapbox-gl": "^1.10.1",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
@@ -79,6 +83,7 @@
     "redux": "^4.0.5",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
+    "swr": "^0.2.1",
     "tslint": "^6.1.1"
   }
 }
