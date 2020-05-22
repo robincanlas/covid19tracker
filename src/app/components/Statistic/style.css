@@ -27,7 +27,8 @@
   margin: 1em 0;
   font-size: 2em;
   font-weight: bolder;
-  color: #181f24;
+  /* color: #181f24; */
+  color: white;
   transition: color 500ms ease-in-out;
 }
 

@@ -46,3 +46,15 @@
   width: 4rem;
   height: 4rem;
 }
+
+.cases {
+  color: var(--cases-color);
+}
+
+.deaths {
+  color: var(--deaths-color);
+}
+
+.recovered {
+  color: var(--recovered-color);
+}

@@ -1,0 +1,46 @@
+.stats {
+  width: 100%;
+  height: auto;
+  position: absolute;
+  display: block;
+  top: 0;
+  transform: translateX(-100%);
+  transition: transform 500ms ease-in-out;
+  background: var(--midnight-black);
+  z-index: 9;
+  padding: 2em 0;
+}
+
+.stats.show {
+  transform: translateX(0%);
+}
+
+.settings {
+  position: absolute;
+  z-index: 9;
+  display: block;
+  margin: 2em 1em;
+  cursor: pointer;
+  transition: opacity 500ms ease-in-out;
+}
+
+.stats > .settings {
+  top: 0;
+}
+
+.settings.hide {
+  opacity: 0;
+}
+
+.settings > i {
+  color: white;
+  font-size: 2.5em;
+}
+
+@media (min-width: 768px) { 
+  .stats {
+    width: 50%;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}

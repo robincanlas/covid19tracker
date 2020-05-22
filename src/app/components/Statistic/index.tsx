@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as style from './style.css';
-import { Container, Card, Icon } from 'semantic-ui-react';
+import { Container, Card } from 'semantic-ui-react';
 import { StatisticsActions } from 'app/store/statistic/actions';
 import { RootState } from 'app/store';
 import { Models } from 'app/models';
@@ -27,19 +27,20 @@ const StatisticComponent: React.FC<StatisticComponent.Props> = ({
 		actions.getStats(`${endPoint.url}/all`, 'Global');
 	}, []);
 
-	const [mode, setMode] = React.useState(localStorage.getItem('mode') || '');
-	React.useEffect(() => {
-		localStorage.setItem('mode', mode || '');
-		document.body.style.background = mode === 'dark' ? '#181f24' : 'white' ;
-	}, [mode]);
+	// const [mode, setMode] = React.useState(localStorage.getItem('mode') || '');
+	// React.useEffect(() => {
+	// 	localStorage.setItem('mode', mode || '');
+	// 	document.body.style.background = mode === 'dark' ? '#181f24' : 'white' ;
+	// }, [mode]);
 
 	return (
 		<Container id={style.container}>
-			{mode === 'dark' ?
+			{/* {mode === 'dark' ?
 				<Icon className={style.sun} name='sun outline' size='big' onClick={() => setMode('light')} /> :
 				<Icon className={style.moon} name='moon' size='big' onClick={() => setMode('dark')} />
-			}
-			<div className={`${style.title} ${mode === 'dark' ? style.light : ''}`}>COVID-19 TRACKER</div>
+			} */}
+			{/* <div className={`${style.title} ${mode === 'dark' ? style.light : ''}`}>COVID-19 TRACKER</div> */}
+			<div className={style.title}>COVID-19 TRACKER</div>
 			<div className={style.grid}>
 				{statistics.map(element => (
 					<Card className={style[element.name]} fluid key={element.name}>

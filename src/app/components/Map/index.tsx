@@ -5,17 +5,27 @@ import mapboxgl, { LngLatLike } from 'mapbox-gl';
 // import { Feature, Geometry, GeoJsonProperties } from 'geojson';
 import useSWR from 'swr'; // React hook to fetch the data
 import lookup from 'country-code-lookup'; // npm module to get ISO Code for countries
+import axios from 'axios';
+import { useSelector, shallowEqual } from 'react-redux';
+import { RootState } from 'app/store';
 
 // Mapbox css - needed to make tooltips work later in this article
-import 'mapbox-gl/dist/mapbox-gl.css';
+// import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicnVrYmluMDExIiwiYSI6ImNrYWdrbDI3bTA5NzgyeHBuaWkzbWIxeDQifQ.C7KY2elb_bs0qrST3HvSSQ';
 
 export const Map: React.FC = () => {
+	// let map: mapboxgl.Map;
 	const mapboxElRef = React.useRef(null); // DOM element to render map
+	const [mapState, setMap] = React.useState(new mapboxgl.Map({
+		container: '',
+		style: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v',
+		center: [121.76572,  13.01153], // initial geo location for Philippines
+		zoom: 2 // initial zoom
+	}));
 	const fetcher = (url: string) =>
-		fetch(url)
-			.then(r => r.json())
+		axios.get(url)
+			.then(r => r.data)
 			.then((country: Models.MapData[]) =>
 				country.map((point, index) => ({
 					type: 'Feature' as const,
@@ -39,16 +49,22 @@ export const Map: React.FC = () => {
 
 	// Fetching our data with swr package
 	const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
-	// Initialize our map
-	React.useEffect(() => {
+	
+	const constructMap = () => {
 		if (data) {
-			// const highesCases: number = Math.max.apply(Math, data.map((o) => { return o.properties.cases; }));
-			
+			const highestCases: number = Math.max.apply(Math, data.map((o) => { return o.properties.cases; }));
+			const interpolateCount: number = 7;
+			const incremental: number = Math.floor(highestCases / interpolateCount);
+			let casesSample: number[] = [];
+			for (let i = 1; i <= interpolateCount; i++) {
+				casesSample.push(i * incremental);
+			}
+
 			// You can store the map instance with useRef too
 			const map = new mapboxgl.Map({
 				container: mapboxElRef.current!,
 				style: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v',
-				center: [121.76572,  13.01153], // initial geo location
+				center: [121.76572,  13.01153], // initial geo location for Philippines
 				zoom: 2 // initial zoom
 				// zoom: 4.94 // initial zoom
 			});
@@ -82,18 +98,24 @@ export const Map: React.FC = () => {
 							['linear'],
 							['get', 'cases'],
 							1, 1,
-							100000, 1.75,
+							highestCases, 1.75,
 						],
 						'circle-radius': [
 							'interpolate',
 							['linear'],
 							['get', 'cases'],
 							1, 4,
-							1000, 8,
-							4000, 10,
-							8000, 14,
-							12000, 18,
-							100000, 40
+							1000, 6,
+							4000, 8,
+							8000, 10,
+							12000, 15,
+							casesSample[0], 24,
+							casesSample[1], 28,
+							casesSample[2], 32,
+							casesSample[3], 36,
+							casesSample[4], 40,
+							casesSample[5], 44,
+							highestCases, 48
 						],
 						'circle-color': [
 							'interpolate',
@@ -105,7 +127,7 @@ export const Map: React.FC = () => {
 							25000, '#fd8d3c',
 							50000, '#fc4e2a',
 							75000, '#e31a1c',
-							100000, '#b10026'
+							highestCases, '#b10026'
 						],
 					}
 				});
@@ -115,6 +137,8 @@ export const Map: React.FC = () => {
 					closeButton: false,
 					closeOnClick: false
 				});
+
+				setMap(map);
 
 				// Variable to hold the active country/province on hover
 				let lastId: number | null;
@@ -150,9 +174,9 @@ export const Map: React.FC = () => {
 
 							const HTML = `<p>Country: <b>${country}</b></p>
 												${provinceHTML}
-												<p>Cases: <b>${cases}</b></p>
-												<p>Deaths: <b>${deaths}</b></p>
-												<p>Recovered: <b>${recovered}</b></p>
+												<p class=${style.cases}>Cases: <b>${Number(cases).toLocaleString()}</b></p>
+												<p class=${style.deaths}>Deaths: <b>${Number(deaths).toLocaleString()}</b></p>
+												<p class=${style.recovered}>Recovered: <b>${Number(recovered).toLocaleString()}</b></p>
 												<p>Mortality Rate: <b>${mortalityRate}%</b></p>
 												${countryFlagHTML}`;
 
@@ -172,7 +196,7 @@ export const Map: React.FC = () => {
 				});
 
 				// Mouse leave event
-				map.on('mouseleave', 'circles', function() {
+				map.on('mouseleave', 'circles', () => {
 					// Reset the last Id
 					lastId = null;
 					map.getCanvas().style.cursor = '';
@@ -180,15 +204,38 @@ export const Map: React.FC = () => {
 				});
 			});
 		}
+	}
 
+	// Initialize our map
+	React.useEffect(() => {
+		constructMap();
+		// setTimeout(() => {
+		// 	// map.setFilter('circles', ['==', ['get', 'country'], 'philippines']);
+		// 	console.log('fire filter');
+		// 	setTimeout(() => {
+		// 		map.setFilter('circles', null);
+		// 	}, 2000);
+		// }, 2000);
 	}, [data]);
 
+	const filteredCountry: any = useSelector((state: RootState) => state.statistic.country, shallowEqual);
+	React.useEffect(() => {
+		let filter: any = ['==', ['get', 'country'], filteredCountry];
+		if (filteredCountry === 'Global') {
+			filter = null;
+		}
+		mapState.setFilter('circles', filter);
+	}, [filteredCountry, mapState]);
+
 	return (
-		<div id={style.map}>
-			<div className={style.mapContainer}>
-				{/* Assigned Mapbox container */}
-				<div className={style.mapBox} ref={mapboxElRef} />
+		<>
+			<div></div>
+			<div id={style.map}>
+				<div className={style.mapContainer}>
+					{/* Assigned Mapbox container */}
+					<div className={style.mapBox} ref={mapboxElRef} />
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
