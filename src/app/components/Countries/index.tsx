@@ -14,6 +14,8 @@ export namespace CountryDropdown {
 		list?: Models.Countries[];
 		countriesPayload?: Models.CountriesPayload[];
 		isLoading?: boolean;
+		country?: string;
+
 		statsActions?: StatisticsActions;
 		countriesActions?: CountriesActions;
 	}
@@ -23,6 +25,7 @@ const CountryDropdown: React.FC<CountryDropdown.Props> = ({
 	list = [], 
 	countriesPayload = [],
 	isLoading = true, 
+	country = 'Global',
 	statsActions = StatisticsActions, 
 	countriesActions = CountriesActions }: CountryDropdown.Props) => {
 	const dispatch = useDispatch();
@@ -60,18 +63,20 @@ const CountryDropdown: React.FC<CountryDropdown.Props> = ({
 				fluid
 				search
 				selection
-				defaultValue='Global'
+				// defaultValue={country}
+				value={country}
 				onChange={changeCountry}
 				options={list} />
 		</Container>
 	);
 };
 
-const mapStateToProps = (state: RootState): Pick<CountryDropdown.Props, 'list' | 'countriesPayload' | 'isLoading'> => {
+const mapStateToProps = (state: RootState): Pick<CountryDropdown.Props, 'list' | 'countriesPayload' | 'isLoading' | 'country'> => {
 	return {
 		list: state.countries.list,
 		countriesPayload: state.countries.countriesPayload,
-		isLoading: state.countries.isLoading
+		isLoading: state.countries.isLoading,
+		country: state.statistic.country
 	};
 };
 

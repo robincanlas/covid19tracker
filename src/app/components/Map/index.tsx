@@ -6,8 +6,10 @@ import mapboxgl, { LngLatLike } from 'mapbox-gl';
 import useSWR from 'swr'; // React hook to fetch the data
 import lookup from 'country-code-lookup'; // npm module to get ISO Code for countries
 import axios from 'axios';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { RootState } from 'app/store';
+import { Icon } from 'semantic-ui-react';
+import { ActionTypes } from 'app/constants';
 
 // Mapbox css - needed to make tooltips work later in this article
 // import 'mapbox-gl/dist/mapbox-gl.css';
@@ -22,7 +24,10 @@ export const Map: React.FC = () => {
 		axios.get(url)
 			.then(r => r.data)
 			.then((country: Models.MapData[]) =>
-				country.map((point, index) => ({
+				country.filter(element => {
+					return element.coordinates.latitude !== ''; // removed no coordinates
+				}).map((point, index) => (
+					{
 					type: 'Feature' as const,
 					geometry: {
 						type: 'Point' as const,
@@ -155,16 +160,14 @@ export const Map: React.FC = () => {
 							const coordinates = e.features[0].geometry.coordinates!.slice();
 
 							// Get all data for the tooltip
-							const countryISO =
-								lookup.byCountry(country)?.iso2 || lookup.byInternet(country)?.iso2;
+							const countryISO = lookup.byCountry(country)?.iso2 || lookup.byInternet(country)?.iso2;
 
-							const provinceHTML =
-								province !== 'null' ? `<p>Province: <b>${province}</b></p>` : '';
+							const provinceHTML = province !== 'null' ? `<p>Province: <b>${province}</b></p>` : '';
 
 							const mortalityRate = ((deaths / cases) * 100).toFixed(2);
 
 							const countryFlagHTML = Boolean(countryISO)
-								? `<img src="https://www.countryflags.io/${countryISO}/flat/64.png"></img>`
+								? `<img class=${style.flag} src="https://www.countryflags.io/${countryISO}/flat/64.png"></img>`
 								: '';
 
 							const HTML = `<p>Country: <b>${country}</b></p>
@@ -206,26 +209,48 @@ export const Map: React.FC = () => {
 		constructMap();
 	}, [data]);
 
-	const filteredCountry: any = useSelector((state: RootState) => state.statistic.country, shallowEqual);
+	const getCountry = (findCountry: string): string => {
+		switch (findCountry) {
+			case 'USA':
+				return 'US';
+			case 'UK':
+				return 'United Kingdom';
+			default: return findCountry;
+		}
+	};
+
+	const filteredCountry: string = useSelector((state: RootState) => state.statistic.country, shallowEqual);
+	// const countriesPayload: Models.CountriesPayload[] = useSelector((state: RootState) => state.countries.countriesPayload, shallowEqual);
 	React.useEffect(() => {
-		if (mapState) {
-			let filter: any = ['==', ['get', 'country'], filteredCountry];
-			if (filteredCountry === 'Global') {
-				filter = null;
-			} else {
-				// const { geometry } = data!.find(element => element.properties.country === filteredCountry)!;
-				console.log(data!.find(element => element.properties.country === filteredCountry))
-				// mapState.panTo([+geometry.coordinates[0], +geometry.coordinates[1]]);
+		if (mapState && filteredCountry) {
+			let	filter: any = null;
+			if (filteredCountry !== 'Global') {
+				const newCountry: string = getCountry(filteredCountry);
+				filter = ['==', ['get', 'country'], newCountry];
+				const country = data!.find(element => element.properties.country === newCountry)!;
+				if (country) {
+					mapState.panTo([+country.geometry.coordinates[0], +country.geometry.coordinates[1]]);
+				}
 			}
 	
 			mapState.setFilter('circles', filter);
-			// mapState.panTo
 		}
 	}, [filteredCountry, mapState]);
 
+	const dispatch = useDispatch();
+
+	const resetFilter = () => {
+		if (mapState) {
+			// mapState.setFilter('circles', null);
+			dispatch({ type: ActionTypes.SET_GLOBAL_STATISTICS });
+		}
+	};
+
 	return (
 		<>
-			<div></div>
+			{filteredCountry !== 'Global' && <div onClick={resetFilter} className={style.repeat}>
+				<Icon size='big' name='repeat' />
+			</div>}
 			<div id={style.map}>
 				<div className={style.mapContainer}>
 					{/* Assigned Mapbox container */}
