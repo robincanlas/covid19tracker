@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import * as style from './style.css';
 import { Map, Statistic, Countries, Chart } from 'app/components';
 import { Icon } from 'semantic-ui-react';
 
 export const App: React.FC = () => {
-	const [sidebar, setSidebar] = useState(false);
+	const [sidebar, setSidebar] = React.useState(false);
+	const sidebarRef = React.useRef<HTMLDivElement | null>(null);
 
-	useEffect(() => {
+	const handleMousedown = (e: MouseEvent) => {
+		if (sidebar && sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+			setSidebar(false);
+		}
+	};
+
+	React.useEffect(() => {
 		// effect;
-
-	}, [sidebar]);
+		document.addEventListener('mousedown', handleMousedown);
+		return() => {
+			document.removeEventListener('mousedown', handleMousedown);
+		};
+	}, [sidebarRef, sidebar]);
 
 	return (
 		<React.Fragment>
@@ -17,7 +27,7 @@ export const App: React.FC = () => {
 				<Icon name='settings' />
 			</span>
 			<Map />
-			<div className={`${style.stats} ${sidebar ? style.show : ''}`}>
+			<div ref={sidebarRef} className={`${style.stats} ${sidebar ? style.show : ''}`}>
 				<span className={style.settings} onClick={() => setSidebar(false)}>
 					<Icon name='angle double left' />
 				</span>

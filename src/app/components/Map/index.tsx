@@ -17,12 +17,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoicnVrYmluMDExIiwiYSI6ImNrYWdrbDI3bTA5NzgyeHBua
 export const Map: React.FC = () => {
 	// let map: mapboxgl.Map;
 	const mapboxElRef = React.useRef(null); // DOM element to render map
-	const [mapState, setMap] = React.useState(new mapboxgl.Map({
-		container: '',
-		style: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v',
-		center: [121.76572,  13.01153], // initial geo location for Philippines
-		zoom: 2 // initial zoom
-	}));
+	const [mapState, setMap] = React.useState<mapboxgl.Map | null>(null);
 	const fetcher = (url: string) =>
 		axios.get(url)
 			.then(r => r.data)
@@ -138,7 +133,7 @@ export const Map: React.FC = () => {
 					closeOnClick: false
 				});
 
-				setMap(map);
+				setMap(map as any);
 
 				// Variable to hold the active country/province on hover
 				let lastId: number | null;
@@ -204,27 +199,28 @@ export const Map: React.FC = () => {
 				});
 			});
 		}
-	}
+	};
 
 	// Initialize our map
 	React.useEffect(() => {
 		constructMap();
-		// setTimeout(() => {
-		// 	// map.setFilter('circles', ['==', ['get', 'country'], 'philippines']);
-		// 	console.log('fire filter');
-		// 	setTimeout(() => {
-		// 		map.setFilter('circles', null);
-		// 	}, 2000);
-		// }, 2000);
 	}, [data]);
 
 	const filteredCountry: any = useSelector((state: RootState) => state.statistic.country, shallowEqual);
 	React.useEffect(() => {
-		let filter: any = ['==', ['get', 'country'], filteredCountry];
-		if (filteredCountry === 'Global') {
-			filter = null;
+		if (mapState) {
+			let filter: any = ['==', ['get', 'country'], filteredCountry];
+			if (filteredCountry === 'Global') {
+				filter = null;
+			} else {
+				// const { geometry } = data!.find(element => element.properties.country === filteredCountry)!;
+				console.log(data!.find(element => element.properties.country === filteredCountry))
+				// mapState.panTo([+geometry.coordinates[0], +geometry.coordinates[1]]);
+			}
+	
+			mapState.setFilter('circles', filter);
+			// mapState.panTo
 		}
-		mapState.setFilter('circles', filter);
 	}, [filteredCountry, mapState]);
 
 	return (
