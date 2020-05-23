@@ -152,8 +152,8 @@ module.exports = (env, option) => {
       })
     ],
     devServer: {
-      host: '192.168.100.8',
-      // host: 'localhost',
+      // host: '192.168.100.8',
+      host: 'localhost',
       port: 8000,
       contentBase: sourcePath,
       hot: true,
