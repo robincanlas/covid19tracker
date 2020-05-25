@@ -23,8 +23,9 @@ export const Map: React.FC = () => {
 	const fetcher = (url: string) =>
 		axios.get(url)
 			.then(r => r.data)
-			.then((country: Models.MapData[]) =>
-				country.filter(element => {
+			.then((country: Models.MapData[]) => {
+				localStorage.setItem('updated', new Date().toString());
+				const features = country.filter(element => {
 					return element.coordinates.latitude !== ''; // removed no coordinates
 				}).map((point, index) => (
 					{
@@ -44,15 +45,31 @@ export const Map: React.FC = () => {
 						deaths: point.stats.deaths,
 						recovered: point.stats.recovered
 					}
-				}))
-			);
+				}));
+				localStorage.setItem('data', JSON.stringify(features));
+				return features;
+			});
 
-	// Fetching our data with swr package
-	const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
+	const shouldFetch = (): boolean => {
+			// FETCH ONLY IF THE LAST UPDATED TIME IS GREATER THAN 4
+			if (localStorage.getItem('updated') && localStorage.getItem('data')) {
+			if (Math.floor(Math.abs(new Date().getTime() - new Date(localStorage.getItem('updated') as string).getTime()) / 3600000) > 4) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	};
 	
+	// const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
+	let { data } = useSWR(() => shouldFetch() ? 'https://disease.sh/v2/jhucsse' : null, fetcher);
+
 	const constructMap = () => {
-		if (data) {
-			const highestCases: number = Math.max.apply(Math, data.map((o) => { return o.properties.cases; }));
+		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string) ;
+		if (covidData) {
+			const highestCases: number = Math.max.apply(Math, covidData.map((o: any) => { return o.properties.cases; }));
 			const interpolateCount: number = 7;
 			const incremental: number = Math.floor(highestCases / interpolateCount);
 			let casesSample: number[] = [];
@@ -81,7 +98,7 @@ export const Map: React.FC = () => {
 					data: {
 						type: 'FeatureCollection',
 						// features: data as Feature<Geometry, GeoJsonProperties>[]
-						features: data as any // change later
+						features: covidData as any // change later
 					}
 				});
 
@@ -227,7 +244,7 @@ export const Map: React.FC = () => {
 			if (filteredCountry !== 'Global') {
 				const newCountry: string = getCountry(filteredCountry);
 				filter = ['==', ['get', 'country'], newCountry];
-				const country = data!.find(element => element.properties.country === newCountry)!;
+				const country = data!.find((element: any) => element.properties.country === newCountry)!;
 				if (country) {
 					mapState.panTo([+country.geometry.coordinates[0], +country.geometry.coordinates[1]]);
 				}
