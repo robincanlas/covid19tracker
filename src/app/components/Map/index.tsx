@@ -69,7 +69,7 @@ export const Map: React.FC = () => {
 	const { data } = useSWR(shouldFetch ? 'https://disease.sh/v2/jhucsse' : null, fetcher);
 
 	const constructMap = () => {
-		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string) ;
+		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string);
 		if (covidData) {
 			const highestCases: number = Math.max.apply(Math, covidData.map((o: any) => { return o.properties.cases; }));
 			const interpolateCount: number = 7;
@@ -246,7 +246,8 @@ export const Map: React.FC = () => {
 			if (filteredCountry !== 'Global') {
 				const newCountry: string = getCountry(filteredCountry);
 				filter = ['==', ['get', 'country'], newCountry];
-				const country = data!.find((element: any) => element.properties.country === newCountry)!;
+				const covidData: any = JSON.parse(localStorage.getItem('data') as string);
+				const country = covidData!.find((element: any) => element.properties.country === newCountry)!;
 				if (country) {
 					mapState.panTo([+country.geometry.coordinates[0], +country.geometry.coordinates[1]]);
 				}
