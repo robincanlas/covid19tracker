@@ -35,6 +35,12 @@
 .settings > i {
   color: white;
   font-size: 2.5em;
+  transition: color 300ms ease;
+  text-shadow: 1px 3px 3px black;
+}
+
+.settings > i:hover { 
+  color: wheat;
 }
 
 @media (min-width: 768px) { 
