@@ -3,7 +3,7 @@
 /* DEFAULTS [S] */
 
 :root {
-  --midnight-black: rgba(4, 4, 53, 0.7);
+  --midnight-black: #0b0b2dfa;
   --cases-color: rgb(122, 182, 202);
   --deaths-color: rgb(209, 47, 47);
   --recovered-color: rgb(44, 202, 5);
