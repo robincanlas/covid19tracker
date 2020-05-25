@@ -29,7 +29,7 @@ export const App: React.FC = () => {
 			<Map />
 			<div ref={sidebarRef} className={`${style.stats} ${sidebar ? style.show : ''}`}>
 				<span className={style.settings} onClick={() => setSidebar(false)}>
-					<Icon name='angle double left' />
+					<Icon name='angle double up' />
 				</span>
 				<Statistic />
 				<Countries />

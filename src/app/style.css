@@ -4,7 +4,7 @@
   position: absolute;
   display: block;
   top: 0;
-  transform: translateX(-100%);
+  transform: translateY(-100%);
   transition: transform 500ms ease-in-out;
   background: var(--midnight-black);
   z-index: 9;
@@ -12,7 +12,7 @@
 }
 
 .stats.show {
-  transform: translateX(0%);
+  transform: translateY(0%);
 }
 
 .settings {
@@ -45,7 +45,7 @@
 
 @media (min-width: 768px) { 
   .stats {
-    width: 50%;
+    width: 500px;
     padding-left: 1em;
     padding-right: 1em;
   }
