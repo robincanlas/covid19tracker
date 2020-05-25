@@ -49,29 +49,29 @@ export const Map: React.FC = () => {
 				localStorage.setItem('data', JSON.stringify(features));
 				return features;
 			});
+		
+	const [shouldFetch, setShouldFetch] = React.useState<boolean>(false);
 
-	// const shouldFetch = (): boolean => {
-	// 		// FETCH ONLY IF THE LAST UPDATED TIME IS GREATER THAN 4
-	// 	if (localStorage.getItem('updated') && localStorage.getItem('data')) {
-	// 		if (Math.floor(Math.abs(new Date().getTime() - new Date(localStorage.getItem('updated') as string).getTime()) / 3600000) > 4) {
-	// 			return true;
-	// 		} else {
-	// 			return false;
-	// 			// return true;
-	// 		}
-	// 	} else {
-	// 		console.log('fetch');
-	// 		return true;
-	// 	}
-	// };
+	React.useEffect(() => {
+		// FETCH ONLY IF THE LAST UPDATED TIME IS GREATER THAN 4
+		if (localStorage.getItem('updated') && localStorage.getItem('data')) {
+			if (Math.floor(Math.abs(new Date().getTime() - new Date(localStorage.getItem('updated') as string).getTime()) / 3600000) > 4) {
+				setShouldFetch(true);
+			} else {
+				setShouldFetch(false);
+			}
+		} else {
+			setShouldFetch(true);
+		}
+	}, []);
 	
-	const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
-	// const { data } = useSWR(shouldFetch() ? 'https://disease.sh/v2/jhucsse' : null, fetcher);
+	// const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
+	const { data } = useSWR(shouldFetch ? 'https://disease.sh/v2/jhucsse' : null, fetcher);
 
 	const constructMap = () => {
-		// const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string) ;
-		if (data) {
-			const highestCases: number = Math.max.apply(Math, data.map((o: any) => { return o.properties.cases; }));
+		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string) ;
+		if (covidData) {
+			const highestCases: number = Math.max.apply(Math, covidData.map((o: any) => { return o.properties.cases; }));
 			const interpolateCount: number = 7;
 			const incremental: number = Math.floor(highestCases / interpolateCount);
 			let casesSample: number[] = [];
@@ -100,7 +100,7 @@ export const Map: React.FC = () => {
 					data: {
 						type: 'FeatureCollection',
 						// features: data as Feature<Geometry, GeoJsonProperties>[]
-						features: data as any // change later
+						features: covidData as any // change later
 					}
 				});
 
