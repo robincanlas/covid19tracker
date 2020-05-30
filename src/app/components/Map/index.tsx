@@ -29,21 +29,22 @@ export const Map: React.FC = () => {
 					return element.coordinates.latitude !== ''; // removed no coordinates
 				}).map((point, index) => (
 					{
-					type: 'Feature' as const,
+					'type': 'Feature' as const,
 					geometry: {
-						type: 'Point' as const,
+						'type': 'Point' as const,
 						coordinates: [
 							point.coordinates.longitude,
 							point.coordinates.latitude
 						]
 					},
 					properties: {
-						id: index, // unique identifier in this case the index
-						country: point.country,
-						province: point.province,
-						cases: point.stats.confirmed,
-						deaths: point.stats.deaths,
-						recovered: point.stats.recovered
+						'id': index, // unique identifier in this case the index
+						'country': point.country,
+						'province': point.province,
+						'cases': point.stats.confirmed,
+						'deaths': point.stats.deaths,
+						'recovered': point.stats.recovered,
+						'updated': point.updatedAt
 					}
 				}));
 				localStorage.setItem('data', JSON.stringify(features));
@@ -175,7 +176,7 @@ export const Map: React.FC = () => {
 							// Change the pointer type on move move
 							map.getCanvas().style.cursor = 'pointer';
 
-							const { cases, deaths, country, province, recovered }: any = e.features[0].properties;
+							const { cases, deaths, country, province, recovered, updated }: any = e.features[0].properties;
 							const coordinates = e.features[0].geometry.coordinates!.slice();
 
 							// Get all data for the tooltip
@@ -195,6 +196,7 @@ export const Map: React.FC = () => {
 												<p class=${style.deaths}>Deaths: <b>${Number(deaths).toLocaleString()}</b></p>
 												<p class=${style.recovered}>Recovered: <b>${Number(recovered).toLocaleString()}</b></p>
 												<p>Mortality Rate: <b>${mortalityRate}%</b></p>
+												<p>Updated: <b>${new Date(updated).toDateString()}</b></p>
 												${countryFlagHTML}`;
 
 							// Ensure that if the map is zoomed out such that multiple
