@@ -44,7 +44,7 @@ export const Map: React.FC = () => {
 						'cases': point.stats.confirmed,
 						'deaths': point.stats.deaths,
 						'recovered': point.stats.recovered,
-						'updated': point.updatedAt
+						'updated': new Date(point.updatedAt).toDateString()
 					}
 				}));
 				localStorage.setItem('data', JSON.stringify(features));
@@ -68,7 +68,7 @@ export const Map: React.FC = () => {
 	
 	// const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
 	const { data } = useSWR(shouldFetch ? 'https://disease.sh/v2/jhucsse' : null, fetcher);
-
+	
 	const constructMap = () => {
 		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string);
 		if (covidData) {
@@ -190,13 +190,13 @@ export const Map: React.FC = () => {
 								? `<img class=${style.flag} src="https://www.countryflags.io/${countryISO}/flat/64.png"></img>`
 								: '';
 
-							const HTML = `<p>Country: <b>${country}</b></p>
+								const HTML = `<p>Country: <b>${country}</b></p>
 												${provinceHTML}
 												<p class=${style.cases}>Cases: <b>${Number(cases).toLocaleString()}</b></p>
 												<p class=${style.deaths}>Deaths: <b>${Number(deaths).toLocaleString()}</b></p>
 												<p class=${style.recovered}>Recovered: <b>${Number(recovered).toLocaleString()}</b></p>
 												<p>Mortality Rate: <b>${mortalityRate}%</b></p>
-												<p>Updated: <b>${new Date(updated).toDateString()}</b></p>
+												<p>Updated: <b>${updated}</b></p>
 												${countryFlagHTML}`;
 
 							// Ensure that if the map is zoomed out such that multiple
