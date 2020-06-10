@@ -16,7 +16,13 @@ import { ActionTypes } from 'app/constants';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicnVrYmluMDExIiwiYSI6ImNrYWdrbDI3bTA5NzgyeHBuaWkzbWIxeDQifQ.C7KY2elb_bs0qrST3HvSSQ';
 
-export const Map: React.FC = () => {
+export namespace Map {
+	export interface Props {
+		mapIsLoaded: () => void;
+	}
+}
+
+export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 	// let map: mapboxgl.Map;
 	const mapboxElRef = React.useRef(null); // DOM element to render map
 	const [mapState, setMap] = React.useState<mapboxgl.Map | null>(null);
@@ -221,6 +227,8 @@ export const Map: React.FC = () => {
 					map.getCanvas().style.cursor = '';
 					popup.remove();
 				});
+
+				props.mapIsLoaded();
 			});
 		}
 	};
