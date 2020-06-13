@@ -51,7 +51,7 @@
   width: 100vw;
   height: 100vh;
   z-index: 91;
-  background: rgba(0, 0, 0, 0.47843137254901963);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .sk-cube-grid {
