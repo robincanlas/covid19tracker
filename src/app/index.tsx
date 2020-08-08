@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as style from './style.css';
-import { Map, Statistic, Countries, Chart } from 'app/components';
+import { Map, Statistic, Countries, Chart, Loader } from 'app/components';
 import { Icon } from 'semantic-ui-react';
 
 export const App: React.FC = () => {
@@ -28,19 +28,7 @@ export const App: React.FC = () => {
 
 	return (
 		<React.Fragment>
-			{isLoading && <span className={style.loading}>
-				<div className={style['sk-cube-grid']}>
-					<div className={`${style['sk-cube']} ${style['sk-cube1']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube2']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube3']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube4']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube5']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube6']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube7']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube8']}`}></div>
-					<div className={`${style['sk-cube']} ${style['sk-cube9']}`}></div>
-				</div>	
-			</span>}
+			{isLoading && <Loader />}
 			<span className={`${style.settings} ${sidebar ? style.hide : ''}`} onClick={() => setSidebar(true)}>
 				<Icon name='settings' />
 			</span>
@@ -52,6 +40,9 @@ export const App: React.FC = () => {
 				<Statistic />
 				<Countries />
 				<Chart />
+				<div className={style.copyright}>
+					<p>© {new Date().getFullYear()}, Coded by Kristoffer Robin Canlas</p>
+				</div>
 			</div>
 		</React.Fragment>
 	);
