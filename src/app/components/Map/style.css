@@ -59,6 +59,10 @@
   color: var(--recovered-color);
 }
 
+.activeCases {
+  color: var(--active-cases-color);
+}
+
 .flag {
   border: 1px solid black;
   position: relative;

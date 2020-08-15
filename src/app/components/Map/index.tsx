@@ -10,11 +10,12 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { RootState } from 'app/store';
 import { Icon } from 'semantic-ui-react';
 import { ActionTypes } from 'app/constants';
+import { paintProperties, CONSTANTS, constructFlag } from 'app/utils';
 
 // Mapbox css - needed to make tooltips work later in this article
 // import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = 'pk.eyJ1IjoicnVrYmluMDExIiwiYSI6ImNrYWdrbDI3bTA5NzgyeHBuaWkzbWIxeDQifQ.C7KY2elb_bs0qrST3HvSSQ';
+mapboxgl.accessToken = CONSTANTS.mapboxAccessToken;
 
 export namespace Map {
 	export interface Props {
@@ -72,8 +73,8 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 		}
 	}, []);
 	
-	// const { data } = useSWR('https://disease.sh/v2/jhucsse', fetcher);
-	const { data } = useSWR(shouldFetch ? 'https://disease.sh/v2/jhucsse' : null, fetcher);
+	// const { data } = useSWR(CONSTANTS.covid19Endpoint, fetcher);
+	const { data } = useSWR(shouldFetch ? CONSTANTS.covid19Endpoint : null, fetcher);
 	
 	const constructMap = () => {
 		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string);
@@ -89,7 +90,7 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 			// You can store the map instance with useRef too
 			const map = new mapboxgl.Map({
 				container: mapboxElRef.current!,
-				style: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v',
+				style: CONSTANTS.mapboxStyle,
 				center: [121.76572,  13.01153], // initial geo location for Philippines
 				zoom: 2 // initial zoom
 				// zoom: 4.94 // initial zoom
@@ -117,45 +118,7 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 					source: 'points', // this should be the id of the source
 					type: 'circle',
 					// paint properties
-					paint: {
-						'circle-opacity': 0.75,
-						'circle-stroke-width': [
-							'interpolate',
-							['linear'],
-							['get', 'cases'],
-							1, 1,
-							highestCases, 1.75,
-						],
-						'circle-radius': [
-							'interpolate',
-							['linear'],
-							['get', 'cases'],
-							1, 4,
-							1000, 6,
-							4000, 8,
-							8000, 10,
-							12000, 15,
-							casesSample[0], 24,
-							casesSample[1], 28,
-							casesSample[2], 32,
-							casesSample[3], 36,
-							casesSample[4], 40,
-							casesSample[5], 44,
-							highestCases, 48
-						],
-						'circle-color': [
-							'interpolate',
-							['linear'],
-							['get', 'cases'],
-							1, '#ffffb2',
-							5000, '#fed976',
-							10000, '#feb24c',
-							25000, '#fd8d3c',
-							50000, '#fc4e2a',
-							75000, '#e31a1c',
-							highestCases, '#b10026'
-						],
-					}
+					paint: paintProperties(highestCases, casesSample)
 				});
 
 				// Create a mapbox popup
@@ -190,15 +153,18 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 
 							const provinceHTML = province !== 'null' ? `<p>Province: <b>${province}</b></p>` : '';
 
-							const mortalityRate = ((deaths / cases) * 100).toFixed(2);
+							// Calculate Mortality Rate
+							const mortalityRate: string = ((deaths / cases) * 100).toFixed(2);
 
-							const countryFlagHTML = Boolean(countryISO)
-								? `<img class=${style.flag} src="https://www.countryflags.io/${countryISO}/flat/64.png"></img>`
-								: '';
+							// Calculate Active Case
+							const activeCases: number = cases - (deaths + recovered);
+
+							const countryFlagHTML = constructFlag(countryISO, style.flag);
 
 								const HTML = `<p>Country: <b>${country}</b></p>
 												${provinceHTML}
-												<p class=${style.cases}>Cases: <b>${Number(cases).toLocaleString()}</b></p>
+												<p class=${style.cases}>Total Cases: <b>${Number(cases).toLocaleString()}</b></p>
+												<p class=${style.activeCases}>Active Cases: <b>${Number(activeCases).toLocaleString()}</b></p>
 												<p class=${style.deaths}>Deaths: <b>${Number(deaths).toLocaleString()}</b></p>
 												<p class=${style.recovered}>Recovered: <b>${Number(recovered).toLocaleString()}</b></p>
 												<p>Mortality Rate: <b>${mortalityRate}%</b></p>
@@ -277,7 +243,7 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 	};
 
 	return (
-		<>
+		<React.Fragment>
 			{filteredCountry !== 'Global' && <div onClick={resetFilter} className={style.repeat}>
 				<Icon size='big' name='repeat' />
 			</div>}
@@ -287,6 +253,6 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 					<div className={style.mapBox} ref={mapboxElRef} />
 				</div>
 			</div>
-		</>
+		</React.Fragment>
 	);
 };

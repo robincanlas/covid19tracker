@@ -5,6 +5,7 @@
 :root {
   --midnight-black: #0b0b2dfa;
   --cases-color: rgb(122, 182, 202);
+  --active-cases-color: rgb(134, 122, 202);
   --deaths-color: rgb(209, 47, 47);
   --recovered-color: rgb(44, 202, 5);
   --bg-color: rgb(53, 57, 64);
