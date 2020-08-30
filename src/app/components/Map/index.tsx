@@ -2,15 +2,13 @@ import * as React from 'react';
 import * as style from './style.css';
 import { Models } from 'app/models';
 import mapboxgl, { LngLatLike } from 'mapbox-gl';
-// import { Feature, Geometry, GeoJsonProperties } from 'geojson';
 import useSWR from 'swr'; // React hook to fetch the data
 import lookup from 'country-code-lookup'; // npm module to get ISO Code for countries
 import axios from 'axios';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { RootState } from 'app/store';
 import { Icon } from 'semantic-ui-react';
-import { ActionTypes } from 'app/constants';
-import { paintProperties, CONSTANTS, constructFlag } from 'app/utils';
+import { ActionTypes, paintProperties, CONSTANTS, constructFlag } from 'app/constants';
 
 // Mapbox css - needed to make tooltips work later in this article
 // import 'mapbox-gl/dist/mapbox-gl.css';
@@ -24,7 +22,6 @@ export namespace Map {
 }
 
 export const Map: React.FC<Map.Props> = (props: Map.Props) => {
-	// let map: mapboxgl.Map;
 	const mapboxElRef = React.useRef(null); // DOM element to render map
 	const [mapState, setMap] = React.useState<mapboxgl.Map | null>(null);
 	const fetcher = (url: string) =>
