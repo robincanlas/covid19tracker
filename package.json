@@ -72,7 +72,7 @@
   "dependencies": {
     "@types/country-code-lookup": "0.0.0",
     "@types/mapbox-gl": "^1.10.2",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "country-code-lookup": "0.0.17",
     "mapbox-gl": "^1.10.1",
     "normalize.css": "^8.0.1",
