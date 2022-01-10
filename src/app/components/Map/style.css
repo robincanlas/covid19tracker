@@ -67,6 +67,7 @@
   border: 1px solid black;
   position: relative;
   display: block;
+  width: 100%;
 }
 
 .repeat {

@@ -142,7 +142,7 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 							// Change the pointer type on move move
 							map.getCanvas().style.cursor = 'pointer';
 
-							const { cases, deaths, country, province, recovered, updated }: any = e.features[0].properties;
+							const { cases, deaths, country, province, updated }: any = e.features[0].properties;
 							const coordinates = e.features[0].geometry.coordinates!.slice();
 
 							// Get all data for the tooltip
@@ -154,16 +154,15 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 							const mortalityRate: string = ((deaths / cases) * 100).toFixed(2);
 
 							// Calculate Active Case
-							const activeCases: number = cases - (deaths + recovered);
-
+							// const activeCases: number = cases - (deaths + recovered);
+							// <p class=${style.activeCases}>Active Cases: <b>${Number(activeCases).toLocaleString()}</b></p>
+							// <p class=${style.recovered}>Recovered: <b>${Number(recovered).toLocaleString()}</b></p>
 							const countryFlagHTML = constructFlag(countryISO, style.flag);
 
 								const HTML = `<p>Country: <b>${country}</b></p>
 												${provinceHTML}
 												<p class=${style.cases}>Total Cases: <b>${Number(cases).toLocaleString()}</b></p>
-												<p class=${style.activeCases}>Active Cases: <b>${Number(activeCases).toLocaleString()}</b></p>
 												<p class=${style.deaths}>Deaths: <b>${Number(deaths).toLocaleString()}</b></p>
-												<p class=${style.recovered}>Recovered: <b>${Number(recovered).toLocaleString()}</b></p>
 												<p>Mortality Rate: <b>${mortalityRate}%</b></p>
 												<p>Updated: <b>${updated}</b></p>
 												${countryFlagHTML}`;

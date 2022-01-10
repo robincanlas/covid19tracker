@@ -27,18 +27,18 @@ export enum ActionTypes {
 }
 
 export const endPoint: Models.EndPoint = {
-	url: 'https://disease.sh/v2',
+	url: 'https://robincanlas-covid19-service.herokuapp.com/covid19',
 };
 
 export const CONSTANTS = {
-	covid19Endpoint: 'https://disease.sh/v2/jhucsse',
+	covid19Endpoint: 'https://robincanlas-covid19-service.herokuapp.com/covid19/list/jhucsse',
 	mapboxAccessToken: 'pk.eyJ1IjoicnVrYmluMDExIiwiYSI6ImNrYWdrbDI3bTA5NzgyeHBuaWkzbWIxeDQifQ.C7KY2elb_bs0qrST3HvSSQ',
 	mapboxStyle: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v'
 };
 
 export const constructFlag = (countryISO: string, className: string): string => {
 	return Boolean(countryISO)
-	? `<img class=${className} src="https://www.countryflags.io/${countryISO}/flat/64.png"></img>`
+	? `<img class=${className} src="https://disease.sh/assets/img/flags/${countryISO.toLowerCase()}.png"></img>`
 	: '';
 };
 
