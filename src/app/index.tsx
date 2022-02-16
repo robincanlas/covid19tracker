@@ -41,7 +41,7 @@ export const App: React.FC = () => {
 				<Countries />
 				<Chart />
 				<div className={style.copyright}>
-					<p>© {new Date().getFullYear()}, Coded by Kristoffer Robin Canlas</p>
+					<p>© 2020, Coded by Kristoffer Robin Canlas</p>
 				</div>
 			</div>
 		</React.Fragment>

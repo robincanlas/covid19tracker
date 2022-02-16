@@ -19,7 +19,7 @@ export const Loader: React.FC = () => {
 				<div className={`${style['sk-cube']} ${style['sk-cube9']}`}></div>
 			</div>	
 			<div className={style.copyright}>
-				<p>© {new Date().getFullYear()}, Coded by Kristoffer Robin Canlas</p>
+				<p>© 2020, Coded by Kristoffer Robin Canlas</p>
 			</div>
 		</span>
 	);
