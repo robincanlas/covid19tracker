@@ -48,7 +48,7 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 						'cases': point.stats.confirmed,
 						'deaths': point.stats.deaths,
 						'recovered': point.stats.recovered,
-						'updated': new Date(point.updatedAt).toDateString()
+						'updated': new Date(+point.updatedAt).toDateString()
 					}
 				}));
 				localStorage.setItem('data', JSON.stringify(features));
@@ -221,7 +221,8 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 			if (filteredCountry !== 'Global') {
 				const newCountry: string = getCountry(filteredCountry);
 				filter = ['==', ['get', 'country'], newCountry];
-				const covidData: any = JSON.parse(localStorage.getItem('data') as string);
+				// const covidData: any = JSON.parse(localStorage.getItem('data') as string);
+				const covidData: any = data;
 				const country = covidData!.find((element: any) => element.properties.country === newCountry)!;
 				if (country) {
 					mapState.panTo([+country.geometry.coordinates[0], +country.geometry.coordinates[1]]);

@@ -27,11 +27,12 @@ export enum ActionTypes {
 }
 
 export const endPoint: Models.EndPoint = {
-	url: 'https://robincanlas-covid19-service.onrender.com/covid19',
+	url: 'https://robincanlas-server-typescript.onrender.com/covid19',
 };
 
 export const CONSTANTS = {
-	covid19Endpoint: 'https://robincanlas-covid19-service.onrender.com/covid19/list/jhucsse',
+	covid19Endpoint: 'https://robincanlas-server-typescript.onrender.com/covid19/list/jhucsse',
+	// covid19Endpoint: 'http://localhost:9001/covid19/list/jhucsse',
 	mapboxAccessToken: 'pk.eyJ1IjoicnVrYmluMDExIiwiYSI6ImNrYWdrbDI3bTA5NzgyeHBuaWkzbWIxeDQifQ.C7KY2elb_bs0qrST3HvSSQ',
 	mapboxStyle: 'mapbox://styles/rukbin011/ckagtrcc110de1ipt2pzqqn5v'
 };
