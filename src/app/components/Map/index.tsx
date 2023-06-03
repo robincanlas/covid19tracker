@@ -55,23 +55,26 @@ export const Map: React.FC<Map.Props> = (props: Map.Props) => {
 				return features;
 			});
 		
-	const [shouldFetch, setShouldFetch] = React.useState<boolean>(false);
+  // [S] TO PREVENT RE-FETCHING DATA, STORE TO LOCALSTORAGE
+	// const [shouldFetch, setShouldFetch] = React.useState<boolean>(true);
 
-	React.useEffect(() => {
-		// FETCH ONLY IF THE LAST UPDATED TIME IS GREATER THAN 4
-		if (localStorage.getItem('updated') && localStorage.getItem('data')) {
-			if (Math.floor(Math.abs(new Date().getTime() - new Date(localStorage.getItem('updated') as string).getTime()) / 3600000) > 4) {
-				setShouldFetch(true);
-			} else {
-				setShouldFetch(false);
-			}
-		} else {
-			setShouldFetch(true);
-		}
-	}, []);
+	// React.useEffect(() => {
+	// 	FETCH ONLY IF THE LAST UPDATED TIME IS GREATER THAN 4
+	// 	if (localStorage.getItem('updated') && localStorage.getItem('data')) {
+	// 		if (Math.floor(Math.abs(new Date().getTime() - new Date(localStorage.getItem('updated') as string).getTime()) / 3600000) > 4) {
+	// 			setShouldFetch(true);
+	// 		} else {
+	// 			setShouldFetch(false);
+	// 		}
+	// 	} else {
+	// 		setShouldFetch(true);
+	// 	}
+	// }, []);
 	
-	// const { data } = useSWR(CONSTANTS.covid19Endpoint, fetcher);
-	const { data } = useSWR(shouldFetch ? CONSTANTS.covid19Endpoint : null, fetcher);
+  // const { data } = useSWR(shouldFetch ? CONSTANTS.covid19Endpoint : null, fetcher);
+	// [E] TO PREVENT RE-FETCHING DATA, STORE TO LOCALSTORAGE
+
+	const { data } = useSWR(CONSTANTS.covid19Endpoint, fetcher);
 	
 	const constructMap = () => {
 		const covidData: any = data ? data : JSON.parse(localStorage.getItem('data') as string);
