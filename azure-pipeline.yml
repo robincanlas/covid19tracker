@@ -1,0 +1,25 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install --silent
+  displayName: 'npm install'
+
+- script: |
+    npm run build
+  displayName: 'npm run build'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: $(System.DefaultWorkingDirectory)/build/
+    artifact: WebApp
+  displayName: 'Publish build artifact'
